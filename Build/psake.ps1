@@ -85,10 +85,6 @@ Task Build -Depends Test,Docs {
         Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value "$($ModuleVersion).$env:APPVEYOR_BUILD_NUMBER" -ErrorAction stop
         $ModuleVersion = "$ModuleVersion.$env:APPVEYOR_BUILD_NUMBER"
     }
-
-    if ($ModuleVersion) {
-        Set-Content -Path "$ENV:BHProjectPath\ModuleVersion.txt" -Value $ModuleVersion
-    }
 }
 
 Task Deploy -Depends Build {
