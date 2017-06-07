@@ -57,8 +57,14 @@ if(
         Write-Error 'Failed to create archive for release'
     }
 
-    $ReleaseNotes = Get-Content -Path .\RELEASENOTES.md | ForEach-Object { if ($_ -like "# $env:ModuleVersion") { $output = $true } elseif ($_ -like '# *') { $output = $false }; if ($output) { $_ } }
-    $ReleaseNotes = $ReleaseNotes | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
+    $ReleaseNotes = 'PLEASE FILL MANUALLY'
+    if (Test-Path -Path $ProjectRoot\RELEASENOTES.md) {
+        $ReleaseNotesSection = Get-Content -Path $ProjectRoot\RELEASENOTES.md | ForEach-Object { if ($_ -like "# $env:ModuleVersion") { $output = $true } elseif ($_ -like '# *') { $output = $false }; if ($output) { $_ } }
+        $ReleaseNotesSection = $ReleaseNotesSection | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
+        if ($ReleaseNotesSection.Length -gt 0) {
+            $ReleaseNotes = $ReleaseNotesSection -join "`n"
+        }
+    }
 
     $RequestBody = ConvertTo-Json -InputObject @{
         "tag_name"         = "$env:ModuleVersion"
