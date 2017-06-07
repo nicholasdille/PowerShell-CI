@@ -1,3 +1,7 @@
+# 0.1.17
+
+- Added automatic notes to GitHub release
+
 # 0.1.15
 
 - Test release
