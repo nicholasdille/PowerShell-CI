@@ -44,7 +44,7 @@ Task Test -Depends Init  {
     If($ENV:BHBuildSystem -eq 'AppVeyor')
     {
         (New-Object 'System.Net.WebClient').UploadFile(
-            "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
+            "https://ci.appveyor.com/api/testresults/nunit/$env:APPVEYOR_JOB_ID",
             "$ProjectRoot\$TestFile" )
     }
 
@@ -68,7 +68,7 @@ Task Docs {
 Task Build -Depends Test,Docs {
     $lines
 
-    $Module = Get-ChildItem -Path . -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -ine 'build' }
+    $Module = Get-ChildItem -Path $ProjectRoot -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -eq $_.BaseName }
     if ($Module -is [array]) {
         Write-Error 'Found more than one module manifest'
     }
