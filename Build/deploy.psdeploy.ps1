@@ -53,16 +53,16 @@ if(
 )
 {
     $GitHubBranch = $env:BHBranchName
-    $RequestBody = @{
+    $RequestBody = ConvertTo-Json -InputObject @{
         "tag_name"         = "$ModuleVersion"
         "target_commitish" = "$GitHubBranch"
         "name"             = "Version $ModuleVersion"
         "body"             = 'TODO'
         "draft"            = $true
         "prerelease"       = $false
-    } | ConvertTo-Json
+    }
     $Result = Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
-    $Result | Write-Host
+    $Result.StatusCode | Write-Host
 
     $Result.StatusCode -eq 200
 }

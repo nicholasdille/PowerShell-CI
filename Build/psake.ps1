@@ -18,6 +18,17 @@ Properties {
     {
         $Verbose = @{Verbose = $True}
     }
+
+    # Load module manifest
+    $Module = Get-ChildItem -Path $ProjectRoot -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -eq $_.BaseName }
+    if ($Module -is [array]) {
+        Write-Error 'Found more than one module manifest'
+    }
+    if (-Not $Module) {
+        Write-Error 'Did not find any module manifest'
+    }
+    Import-LocalizedData -BindingVariable Manifest -BaseDirectory $Module.Directory.FullName -FileName $Module.Name
+    $ModuleVersion = $Manifest.ModuleVersion
 }
 
 Task Default -Depends Test
@@ -68,18 +79,8 @@ Task Docs {
 Task Build -Depends Test,Docs {
     $lines
 
-    $Module = Get-ChildItem -Path $ProjectRoot -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -eq $_.BaseName }
-    if ($Module -is [array]) {
-        Write-Error 'Found more than one module manifest'
-    }
-    if (-Not $Module) {
-        Write-Error 'Did not find any module manifest'
-    }
-    Import-LocalizedData -BindingVariable manifest -BaseDirectory $Module.Directory.FullName -FileName $Module.Name
-    
-    $ModuleVersion = $manifest.ModuleVersion
     If($ENV:BHBuildSystem -eq 'AppVeyor') {
-        Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value "$($ModuleVersion).$env:APPVEYOR_BUILD_NUMBER" -ErrorAction stop
+        Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value "$($Manifest.ModuleVersion).$env:APPVEYOR_BUILD_NUMBER" -ErrorAction stop
         $ModuleVersion = "$ModuleVersion.$env:APPVEYOR_BUILD_NUMBER"
     }
 }
