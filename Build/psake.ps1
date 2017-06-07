@@ -20,14 +20,14 @@ Properties {
     }
 
     # Load module manifest
-    $Module = Get-ChildItem -Path $ProjectRoot -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -eq $_.BaseName }
-    if ($Module -is [array]) {
+    $PSModule = Get-ChildItem -Path $ProjectRoot -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -eq $_.BaseName }
+    if ($PSModule -is [array]) {
         Write-Error 'Found more than one module manifest'
     }
-    if (-Not $Module) {
+    if (-Not $PSModule) {
         Write-Error 'Did not find any module manifest'
     }
-    Import-LocalizedData -BindingVariable Manifest -BaseDirectory $Module.Directory.FullName -FileName $Module.Name
+    Import-LocalizedData -BindingVariable Manifest -BaseDirectory $PSModule.Directory.FullName -FileName $PSModule.Name
     $ModuleVersion = $Manifest.ModuleVersion
 }
 
