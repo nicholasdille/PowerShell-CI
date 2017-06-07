@@ -1,1 +1,1 @@
-﻿
+﻿Write-Host 'PowerShell-CI/Module'

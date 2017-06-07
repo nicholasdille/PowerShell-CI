@@ -8,7 +8,7 @@
     Description = 'Used for testing build scripts'
     PowerShellVersion = '5.0'
     FunctionsToExport = '*'
-    CmdletsToExport = ''
+    CmdletsToExport = '*'
     VariablesToExport = ''
     AliasesToExport = '*'
     FormatsToProcess = ''
