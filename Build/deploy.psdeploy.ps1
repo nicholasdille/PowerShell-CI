@@ -52,14 +52,18 @@ if(
     $env:BHCommitMessage -match '!release'
 )
 {
-    Compress-Archive -Path $env:BHModulePath -DestinationPath $ProjectRoot\$env:BHProjectName-$env:ModuleVersion.zip
-    if (-Not (Test-Path -Path $ProjectRoot\$env:BHProjectName-$env:ModuleVersion.zip)) {
+    Compress-Archive -Path $env:BHModulePath -DestinationPath $env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip
+    if (-Not (Test-Path -Path $env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip)) {
         Write-Error 'Failed to create archive for release'
     }
+    "Created release asset $($env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip)" |
+        Write-Host
 
     $ReleaseNotes = 'PLEASE FILL MANUALLY'
-    if (Test-Path -Path $ProjectRoot\RELEASENOTES.md) {
-        $ReleaseNotesSection = Get-Content -Path $ProjectRoot\RELEASENOTES.md | ForEach-Object {
+    if (Test-Path -Path $env:BHProjectPath\RELEASENOTES.md) {
+        "Parsing release notes for version $env:ModuleVersion" |
+            Write-Host
+        $ReleaseNotesSection = Get-Content -Path $env:BHProjectPath\RELEASENOTES.md | ForEach-Object {
             if ($_ -like "# $env:ModuleVersion") {
                 $output = $true
 
@@ -84,10 +88,12 @@ if(
         }
 
     } else {
-        "Unable to locate release notes in $ProjectRoot\RELEASENOTES.md." |
+        "Unable to locate release notes in $env:BHProjectPath\RELEASENOTES.md." |
             Write-Host
     }
 
+    "Creating release in GitHub repository" |
+        Write-Host
     $RequestBody = ConvertTo-Json -InputObject @{
         "tag_name"         = "$env:ModuleVersion"
         "target_commitish" = "$env:BHBranchName"
@@ -102,8 +108,9 @@ if(
     }
     $GitHubReleaseId = ($Result.Content | ConvertFrom-Json).id
 
-    # add asset
-    $RequestBody = Get-Content -Path $ProjectRoot\$env:BHProjectName-$env:ModuleVersion.zip -Raw
+    "Uploading asset to GitHub release" |
+        Write-Host
+    $RequestBody = Get-Content -Path $env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip -Raw
     $Result = Invoke-WebRequest -Method Post -Uri "https://uploads.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases/$GitHubReleaseId/assets?name=$env:BHProjectName-$env:ModuleVersion.zip" -Headers @{Authorization = "token $ENV:GitHubToken"} -ContentType 'application/zip' -Body $RequestBody
     if ($Result.StatusCode -ne 201) {
         Write-Error "Failed to upload release asset. Code $($Result.StatusCode): $($Result.Content)"
