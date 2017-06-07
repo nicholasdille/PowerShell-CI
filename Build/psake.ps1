@@ -28,7 +28,7 @@ Properties {
         Write-Error 'Did not find any module manifest'
     }
     Import-LocalizedData -BindingVariable Manifest -BaseDirectory $PSModule.Directory.FullName -FileName $PSModule.Name
-    $ModuleVersion = $Manifest.ModuleVersion
+    $env:ModuleVersion = $Manifest.ModuleVersion
 }
 
 Task Default -Depends Test
@@ -81,7 +81,7 @@ Task Build -Depends Test,Docs {
 
     If($ENV:BHBuildSystem -eq 'AppVeyor') {
         Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value "$($Manifest.ModuleVersion).$env:APPVEYOR_BUILD_NUMBER" -ErrorAction stop
-        $ModuleVersion = "$($Manifest.ModuleVersion).$env:APPVEYOR_BUILD_NUMBER"
+        $env:ModuleVersion = "$($Manifest.ModuleVersion).$env:APPVEYOR_BUILD_NUMBER"
     }
 }
 

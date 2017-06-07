@@ -53,9 +53,9 @@ if(
 )
 {
     $RequestBody = ConvertTo-Json -InputObject @{
-        "tag_name"         = "$ModuleVersion"
+        "tag_name"         = "$env:ModuleVersion"
         "target_commitish" = "$env:BHBranchName"
-        "name"             = "Version $ModuleVersion"
+        "name"             = "Version $env:ModuleVersion"
         "body"             = 'TODO'
         "draft"            = $true
         "prerelease"       = $false
