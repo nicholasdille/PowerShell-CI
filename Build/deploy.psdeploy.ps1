@@ -62,7 +62,9 @@ if(
     }
     $Result = Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
 
-    $Result.StatusCode -eq 201
+    if ($Result.StatusCode -ne 201) {
+        Write-Error "Failed to create release. Code $($Result.StatusCode): $($Result.Content)"
+    }
 }
 else
 {
