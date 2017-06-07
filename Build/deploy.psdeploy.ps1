@@ -57,11 +57,14 @@ if(
         Write-Error 'Failed to create archive for release'
     }
 
+    $ReleaseNotes = Get-Content -Path .\RELEASENOTES.md | ForEach-Object { if ($_ -like "# $env:ModuleVersion") { $output = $true } elseif ($_ -like '# *') { $output = $false }; if ($output) { $_ } }
+    $ReleaseNotes = $ReleaseNotes | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
+
     $RequestBody = ConvertTo-Json -InputObject @{
         "tag_name"         = "$env:ModuleVersion"
         "target_commitish" = "$env:BHBranchName"
         "name"             = "Version $env:ModuleVersion"
-        "body"             = 'TODO'
+        "body"             = "$ReleaseNotes"
         "draft"            = $false
         "prerelease"       = $false
     }
