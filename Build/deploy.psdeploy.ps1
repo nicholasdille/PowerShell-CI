@@ -56,7 +56,7 @@ if(
     if (-Not (Test-Path -Path $env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip)) {
         Write-Error 'Failed to create archive for release'
     }
-    "Created release asset $($env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip)" |
+    "Created release asset $env:BHProjectPath\$env:BHProjectName-$env:ModuleVersion.zip" |
         Write-Host
 
     $ReleaseNotes = 'PLEASE FILL MANUALLY'
