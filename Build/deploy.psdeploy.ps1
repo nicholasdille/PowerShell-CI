@@ -52,19 +52,17 @@ if(
     $env:BHCommitMessage -match '!release'
 )
 {
-    $GitHubBranch = $env:BHBranchName
     $RequestBody = ConvertTo-Json -InputObject @{
         "tag_name"         = "$ModuleVersion"
-        "target_commitish" = "$GitHubBranch"
+        "target_commitish" = "$env:BHBranchName"
         "name"             = "Version $ModuleVersion"
         "body"             = 'TODO'
         "draft"            = $true
         "prerelease"       = $false
     }
     $Result = Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
-    $Result.StatusCode | Write-Host
 
-    $Result.StatusCode -eq 200
+    $Result.StatusCode -eq 201
 }
 else
 {
