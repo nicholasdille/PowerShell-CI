@@ -81,7 +81,7 @@ Task Build -Depends Test,Docs {
 
     If($ENV:BHBuildSystem -eq 'AppVeyor') {
         Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value "$($Manifest.ModuleVersion).$env:APPVEYOR_BUILD_NUMBER" -ErrorAction stop
-        $ModuleVersion = "$ModuleVersion.$env:APPVEYOR_BUILD_NUMBER"
+        $ModuleVersion = "$($Manifest.ModuleVersion).$env:APPVEYOR_BUILD_NUMBER"
     }
 }
 
