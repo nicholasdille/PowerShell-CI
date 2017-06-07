@@ -1,6 +1,11 @@
+# 0.1.19
+
+- Fixed code for automatic release notes
+- Updated release notes
+
 # 0.1.18
 
--Updated code for release notes
+- Updated code for release notes
 
 # 0.1.17
 
