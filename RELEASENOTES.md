@@ -1,3 +1,7 @@
+# 0.1.18
+
+-Updated code for release notes
+
 # 0.1.17
 
 - Added automatic notes to GitHub release
