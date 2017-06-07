@@ -1,3 +1,8 @@
+# 0.1.20
+
+- Fixed code for automatic release notes
+- Fixed path for automatic release asset
+
 # 0.1.19
 
 - Fixed code for automatic release notes
