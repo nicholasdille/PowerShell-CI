@@ -61,7 +61,10 @@ if(
         "draft"            = $true
         "prerelease"       = $false
     } | ConvertTo-Json
-    Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
+    $Result = Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
+    $Result | Write-Host
+
+    $Result.StatusCode -eq 200
 }
 else
 {
