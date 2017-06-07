@@ -52,18 +52,30 @@ if(
     $env:BHCommitMessage -match '!release'
 )
 {
+    Compress-Archive -Path $env:BHModulePath -DestinationPath $ProjectRoot\$env:BHProjectName-$env:ModuleVersion.zip
+    if (-Not (Test-Path -Path $ProjectRoot\$env:BHProjectName-$env:ModuleVersion.zip)) {
+        Write-Error 'Failed to create archive for release'
+    }
+
     $RequestBody = ConvertTo-Json -InputObject @{
         "tag_name"         = "$env:ModuleVersion"
         "target_commitish" = "$env:BHBranchName"
         "name"             = "Version $env:ModuleVersion"
         "body"             = 'TODO'
-        "draft"            = $true
+        "draft"            = $false
         "prerelease"       = $false
     }
     $Result = Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
-
     if ($Result.StatusCode -ne 201) {
         Write-Error "Failed to create release. Code $($Result.StatusCode): $($Result.Content)"
+    }
+    $GitHubReleaseId = ($Result.Content | ConvertFrom-Json).id
+
+    # add asset
+    $RequestBody = Get-Content -Path $ProjectRoot\$env:BHProjectName-$env:ModuleVersion.zip -Raw
+    $Result = Invoke-WebRequest -Method Post -Uri "https://uploads.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases/$GitHubReleaseId/assets?name=$env:BHProjectName-$env:ModuleVersion.zip" -Headers @{Authorization = "token $ENV:GitHubToken"} -ContentType 'application/zip' -Body $RequestBody
+    if ($Result.StatusCode -ne 201) {
+        Write-Error "Failed to upload release asset. Code $($Result.StatusCode): $($Result.Content)"
     }
 }
 else
