@@ -59,11 +59,33 @@ if(
 
     $ReleaseNotes = 'PLEASE FILL MANUALLY'
     if (Test-Path -Path $ProjectRoot\RELEASENOTES.md) {
-        $ReleaseNotesSection = Get-Content -Path $ProjectRoot\RELEASENOTES.md | ForEach-Object { if ($_ -like "# $env:ModuleVersion") { $output = $true } elseif ($_ -like '# *') { $output = $false }; if ($output) { $_ } }
-        $ReleaseNotesSection = $ReleaseNotesSection | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
-        if ($ReleaseNotesSection.Length -gt 0) {
-            $ReleaseNotes = $ReleaseNotesSection -join "`n"
+        $ReleaseNotesSection = Get-Content -Path $ProjectRoot\RELEASENOTES.md | ForEach-Object {
+            if ($_ -like "# $env:ModuleVersion") {
+                $output = $true
+
+            } elseif ($_ -like '# *') {
+                $output = $false
+            }
+            
+            if ($output) {
+                $_
+            }
         }
+        $ReleaseNotesSection = $ReleaseNotesSection | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
+        if ($ReleaseNotesSection -is [array]) {
+            $ReleaseNotes = $ReleaseNotesSection -join "`n"
+            "Added $($ReleaseNotesSection.Length) lines of release notes" |
+                Write-Host
+
+        } else {
+            $ReleaseNotes = $ReleaseNotesSection
+            "Added $($ReleaseNotesSection.Length) bytes in one line of release notes" |
+                Write-Host
+        }
+
+    } else {
+        "Unable to locate release notes in $ProjectRoot\RELEASENOTES.md." |
+            Write-Host
     }
 
     $RequestBody = ConvertTo-Json -InputObject @{
