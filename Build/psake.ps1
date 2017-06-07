@@ -67,19 +67,16 @@ Task Docs {
 
 Task Build -Depends Test,Docs {
     $lines
+
+    $Module = Get-ChildItem -Path . -File -Recurse -Filter '*.psd1' | Where-Object { $_.Directory.Name -ine 'build' }
+    if ($Module -is [array]) {
+        Write-Error 'Found more than one module manifest'
+    }
+    if (-Not $Module) {
+        Write-Error 'Did not find any module manifest'
+    }
+    Import-LocalizedData -BindingVariable manifest -BaseDirectory $Module.Directory.FullName -FileName $Module.Name
     
-    # Load the module, read the exported functions, update the psd1 FunctionsToExport
-    Set-ModuleFunctions
-
-    $content = Get-Content -Path $env:BHPSModuleManifest -Raw -ErrorAction Stop
-    $scriptBlock = [scriptblock]::Create($content)
-    [string[]] $allowedCommands = @(
-        'Import-LocalizedData', 'ConvertFrom-StringData', 'Write-Host', 'Out-Host', 'Join-Path'
-    )
-    [string[]] $allowedVariables = @('PSScriptRoot')
-    $scriptBlock.CheckRestrictedLanguage($allowedCommands, $allowedVariables, $true)
-    $manifest = & $scriptBlock
-
     $ModuleVersion = $manifest.ModuleVersion
     If($ENV:BHBuildSystem -eq 'AppVeyor') {
         Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value "$($ModuleVersion).$env:APPVEYOR_BUILD_NUMBER" -ErrorAction stop
