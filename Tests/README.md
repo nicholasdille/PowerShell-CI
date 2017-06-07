@@ -1,1 +1,1 @@
-Place your tests in files called *.Tests.ps1
+Place your tests in files called `CMDLET.Tests.ps1`
