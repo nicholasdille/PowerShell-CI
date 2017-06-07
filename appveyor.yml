@@ -9,4 +9,5 @@ os: WMF 5
 build: false
 
 test_script:
-- ps: . .\build\Start-Build.ps1 -Task Deploy
+- ps: . .\Get-AppVeyorEnvironment.ps1
+#- ps: . .\build\Start-Build.ps1 -Task Deploy
