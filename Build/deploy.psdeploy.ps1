@@ -66,7 +66,8 @@ if(
 else
 {
     "Skipping deployment on GitHub: To deploy, ensure that...`n" +
-    "`t* .\ModuleVersion.txt exists"
+    "`t* Your build system is AppVeyor (Current: $env:BHBuildSystem)`n"
+    "`t* Your repo resides on GitHub (Current: $env:APPVEYOR_REPO_PROVIDER)`n"
     "`t* Your commit message includes !deploy (Current: $ENV:BHCommitMessage)" |
         Write-Host
 }
