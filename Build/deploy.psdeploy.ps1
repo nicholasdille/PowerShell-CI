@@ -49,16 +49,14 @@ if(
     $env:BHModulePath -and
     $env:BHBuildSystem -eq 'AppVeyor' -and
     $env:APPVEYOR_REPO_PROVIDER -eq 'gitHub' -and
-    $env:BHCommitMessage -match '!release' -and
-    (Test-Path -Path ".\ModuleVersion.txt")
+    $env:BHCommitMessage -match '!release')
 )
 {
     $GitHubBranch = $env:BHBranchName
-    $Version = Get-Content -Path ".\ModuleVersion.txt"
     $RequestBody = @{
-        "tag_name"         = "$Version"
+        "tag_name"         = "$ModuleVersion"
         "target_commitish" = "$GitHubBranch"
-        "name"             = "Version $Version"
+        "name"             = "Version $ModuleVersion"
         "body"             = 'TODO'
         "draft"            = $true
         "prerelease"       = $false
