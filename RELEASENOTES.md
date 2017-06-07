@@ -1,3 +1,8 @@
+# 0.1.21
+
+- Fixed file name for release asset
+- Fixed something else... almost sure
+
 # 0.1.20
 
 - Fixed code for automatic release notes
