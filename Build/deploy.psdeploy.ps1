@@ -45,28 +45,25 @@ else
 }
 
 # Create GitHub release
-<#if(
+if(
     $env:BHModulePath -and
-    $env:BHCommitMessage -match '!deploy' -and
+    $env:BHBuildSystem -eq 'AppVeyor' -and
+    $env:APPVEYOR_REPO_PROVIDER -eq 'gitHub' -and
+    $env:BHCommitMessage -match '!release' -and
     (Test-Path -Path ".\ModuleVersion.txt")
 )
 {
-    $GitHubUser = 'nicholasdille'
-    $GitHubRepository = 'PowerShell-Statistics'
     $GitHubBranch = $env:BHBranchName
     $Version = Get-Content -Path ".\ModuleVersion.txt"
-    $Description = ''
-    $NoDraft = $true
-    $Release = $true
     $RequestBody = @{
         "tag_name"         = "$Version"
         "target_commitish" = "$GitHubBranch"
         "name"             = "Version $Version"
-        "body"             = "$Description"
-        "draft"            = -Not $NoDraft
-        "prerelease"       = -Not $Release
+        "body"             = 'TODO'
+        "draft"            = $true
+        "prerelease"       = $false
     } | ConvertTo-Json
-    Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$GitHubUser/$GitHubRepository/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
+    Invoke-WebRequest -Method Post -Uri "https://api.github.com/repos/$ENV:APPVEYOR_REPO_NAME/releases" -Headers @{Authorization = "token $ENV:GitHubToken"} -Body $RequestBody
 }
 else
 {
@@ -74,7 +71,7 @@ else
     "`t* .\ModuleVersion.txt exists"
     "`t* Your commit message includes !deploy (Current: $ENV:BHCommitMessage)" |
         Write-Host
-}#>
+}
 
 # Publish to AppVeyor if we're in AppVeyor
 if(
