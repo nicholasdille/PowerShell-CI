@@ -1,24 +1,5 @@
-﻿# Generic module deployment.
-#
-# ASSUMPTIONS:
-#
-# * folder structure either like:
-#
-#   - RepoFolder
-#     - This PSDeploy file
-#     - ModuleName
-#       - ModuleName.psd1
-#
-#   OR the less preferable:
-#   - RepoFolder
-#     - RepoFolder.psd1
-#
-# * Nuget key in $ENV:NugetApiKey
-#
-# * Set-BuildEnvironment from BuildHelpers module has populated ENV:BHModulePath and related variables
-
-# Publish to gallery with a few restrictions
-if(
+﻿# Publish to gallery with a few restrictions
+if (
     $env:BHModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
     $env:BHBranchName -eq "master" -and
@@ -27,10 +8,10 @@ if(
 {
     Deploy Module {
         By PSGalleryModule {
-            FromSource $ENV:BHModulePath
+            FromSource $env:BHModulePath
             To PSGallery
             WithOptions @{
-                ApiKey = $ENV:NugetApiKey
+                ApiKey = $env:NugetApiKey
             }
         }
     }
@@ -38,14 +19,14 @@ if(
 else
 {
     "Skipping deployment to PSGallery: To deploy, ensure that...`n" +
-    "`t* You are in a known build system (Current: $ENV:BHBuildSystem)`n" +
-    "`t* You are committing to the master branch (Current: $ENV:BHBranchName) `n" +
-    "`t* Your commit message includes !deploy (Current: $ENV:BHCommitMessage)" |
+    "`t* You are in a known build system (Current: $env:BHBuildSystem)`n" +
+    "`t* You are committing to the master branch (Current: $env:BHBranchName) `n" +
+    "`t* Your commit message includes !deploy (Current: $env:BHCommitMessage)" |
         Write-Host
 }
 
 # Create GitHub release
-if(
+if (
     $env:BHModulePath -and
     $env:BHBuildSystem -eq 'AppVeyor' -and
     $env:APPVEYOR_REPO_PROVIDER -eq 'gitHub' -and
@@ -126,7 +107,7 @@ else
 }
 
 # Publish to AppVeyor if we're in AppVeyor
-if(
+if (
     $env:BHModulePath -and
     $env:BHBuildSystem -eq 'AppVeyor'
    )
