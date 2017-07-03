@@ -95,6 +95,11 @@ Task Test -Depends Init,Analysis  {
 Task Docs {
     $lines
 
+    if ((Get-ChildItem -Path "$env:BHProjectPath\docs" -Filter '*.md').Length -le 1) {
+        Write-Warning 'No documentation found. Skipping.'
+        return
+    }
+
     $TestResults = Invoke-Pester -Path $env:BHProjectPath\docs\docs.Tests.ps1 -PassThru
 
     if ($TestResults.FailedCount -gt 0) {
