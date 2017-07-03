@@ -1,2 +1,3 @@
-# PowerShell-CI
-Testing of build scripts against Appveyor
+# Introduction
+
+API wrappers and other stuff required for CI/CD of PowerShell modules
