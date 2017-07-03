@@ -1,4 +1,4 @@
-# 0.1.4
+# 0.1.6
 
 - Added cmdlets for managing GitHub releases
 - Added cmdlets for managing GitHub release assets
