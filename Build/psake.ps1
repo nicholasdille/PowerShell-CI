@@ -49,6 +49,12 @@ Task Analysis -Depends Init {
 
 Task Test -Depends Init,Analysis  {
     $lines
+
+    if (-Not (Get-ChildItem -Path "$env:BHProjectPath\Tests" -Filter '*.Tests.ps1')) {
+        Write-Warning 'No tests found. Skipping.'
+        return
+    }
+
     "`n`tSTATUS: Testing with PowerShell $PSVersion"
 
     Remove-Module -Name pester -ErrorAction SilentlyContinue
@@ -68,7 +74,7 @@ Task Test -Depends Init,Analysis  {
     }
     #Remove-Item "$env:BHProjectPath\$TestFile" -Force -ErrorAction SilentlyContinue
 
-    $CodeCoverage = Get-CodeCoverageMetrics -CodeCoverage $TestResults.CodeCoverage
+    $CodeCoverage = Get-CodeCoverageMetric -CodeCoverage $TestResults.CodeCoverage
  
     "Statement coverage: $($CodeCoverage.Statement.Analyzed) analyzed, $($CodeCoverage.Statement.Executed) executed, $($CodeCoverage.Statement.Missed) missed, $($CodeCoverage.Statement.Coverage)%."
     "Function coverage: $($CodeCoverage.Function.Analyzed) analyzed, $($CodeCoverage.Function.Executed) executed, $($CodeCoverage.Function.Missed) missed, $($CodeCoverage.Function.Coverage)%."
