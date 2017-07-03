@@ -1,4 +1,4 @@
-function Get-CodeCoverageMetrics {
+function Get-CodeCoverageMetric {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]

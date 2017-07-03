@@ -39,6 +39,11 @@
 }
 
 function New-GitHubRelease {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        "PSUseShouldProcessForStateChangingFunctions", 
+        "", 
+        Justification = "Will be added evantually."
+    )]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -105,6 +110,11 @@ function New-GitHubRelease {
 }
 
 function Remove-GitHubRelease {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        "PSUseShouldProcessForStateChangingFunctions", 
+        "", 
+        Justification = "Will be added evantually."
+    )]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -190,6 +200,11 @@ function Get-GitHubReleaseAsset {
 }
 
 function New-GitHubReleaseAsset {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        "PSUseShouldProcessForStateChangingFunctions", 
+        "", 
+        Justification = "Will be added evantually."
+    )]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -250,6 +265,11 @@ function New-GitHubReleaseAsset {
 }
 
 function Remove-GitHubReleaseAsset {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        "PSUseShouldProcessForStateChangingFunctions", 
+        "", 
+        Justification = "Will be added evantually."
+    )]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]

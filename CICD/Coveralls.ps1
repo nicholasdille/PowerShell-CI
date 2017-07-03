@@ -1,4 +1,9 @@
 ﻿function New-CoverageReportFromPester {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        "PSUseShouldProcessForStateChangingFunctions", 
+        "", 
+        Justification = "Creates in-memory object only."
+    )]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
