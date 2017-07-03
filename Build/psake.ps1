@@ -32,7 +32,7 @@ Task Init {
 Task Analysis -Depends Init {
     $lines
 
-    $Files = Get-ChildItem -Path .\Statistics\*.ps1 -File
+    $Files = Get-ChildItem -Path "$env:BHModulePath\*.ps1" -File
     $results = $Files | ForEach-Object { Invoke-ScriptAnalyzer -Path $_ -Severity Warning }
     if ($results) {
         $results
