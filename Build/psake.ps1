@@ -34,6 +34,7 @@ Task Analysis -Depends Init {
 
     if ($env:SkipScriptAnalysis) {
         Write-Warning 'Skipping script analysis by user request (SkipScriptAnalysis environment variable).'
+        return
     }
 
     $Files = Get-ChildItem -Path "$env:BHModulePath\*.ps1" -File
