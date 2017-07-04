@@ -32,6 +32,10 @@ Task Init {
 Task Analysis -Depends Init {
     $lines
 
+    if ($env:SkipScriptAnalysis) {
+        Write-Warning 'Skipping script analysis by user request (SkipScriptAnalysis environment variable).'
+    }
+
     $Files = Get-ChildItem -Path "$env:BHModulePath\*.ps1" -File
     $results = $Files | ForEach-Object { Invoke-ScriptAnalyzer -Path $_ -Severity Warning }
     if ($results) {
@@ -50,8 +54,8 @@ Task Analysis -Depends Init {
 Task Test -Depends Init,Analysis  {
     $lines
 
-    if (-Not (Get-ChildItem -Path "$env:BHProjectPath\Tests" -Filter '*.Tests.ps1')) {
-        Write-Warning 'No tests found. Skipping.'
+    if ($env:SkipUnitTests) {
+        Write-Warning 'Skipping unit tests by user request (SkipUnitTests environment variable).'
         return
     }
 
@@ -95,8 +99,8 @@ Task Test -Depends Init,Analysis  {
 Task Docs {
     $lines
 
-    if ((Get-ChildItem -Path "$env:BHProjectPath\docs" -Filter '*.md').Length -le 1) {
-        Write-Warning 'No documentation found. Skipping.'
+    if ($env:SkipDocumentation) {
+        Write-Warning 'Skipping generation of documentation by user request (SkipDocumentation environment variable).'
         return
     }
 
