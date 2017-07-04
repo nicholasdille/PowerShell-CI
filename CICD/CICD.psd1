@@ -9,9 +9,9 @@
     PowerShellVersion = '5.0'
     FunctionsToExport = '*'
     CmdletsToExport = '*'
-    VariablesToExport = ''
+    #VariablesToExport = ''
     AliasesToExport = '*'
-    FormatsToProcess = ''
+    #FormatsToProcess = ''
     RequiredModules = @(
         @{
             ModuleName = 'PSCoverage'
