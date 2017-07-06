@@ -60,7 +60,9 @@ if (
         }
         $ReleaseNotesSection += @(
             ' '
-            "See https://www.powershellgallery.com/packages/$env:ModuleName/$env:ModuleVersion"
+            "Install module from [PowerShell Gallery](https://www.powershellgallery.com/packages/$env:ModuleName/$env:ModuleVersion)"
+            ' '
+            "See build output at [AppVeyor](https://ci.appveyor.com/project/$env:GitHubOwner/$env:GitHubRepo/build/$env:APPVEYOR_BUILD_NUMBER="
         )
         $ReleaseNotesSection = $ReleaseNotesSection | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
         if ($ReleaseNotesSection -is [array]) {
@@ -85,7 +87,7 @@ if (
 
     "Uploading asset to GitHub release" |
         Write-Host
-    New-GitHubReleaseAsset -Owner nicholasdille -Repository PowerShell-Statistics -Token $env:GitHubToken -Release $GitHubReleaseId -Path $AssetPath
+    $GitHubAssetId = New-GitHubReleaseAsset -Owner nicholasdille -Repository PowerShell-Statistics -Token $env:GitHubToken -Release $GitHubReleaseId -Path $AssetPath
 }
 else
 {
