@@ -64,7 +64,7 @@
         @{
             repo_token = 'FILL_THIS'
             source_files = $LineCoverageByFile.Values
-        } | ConvertTo-Json -Depth 5
+        }
         #endregion
     }
 }
