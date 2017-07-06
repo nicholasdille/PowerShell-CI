@@ -7,10 +7,19 @@
     Copyright = '(c) 2017 Nicholas Dille. All rights reserved.'
     Description = 'CI/CD helpers for PowerShell modules'
     PowerShellVersion = '5.0'
-    FunctionsToExport = '*'
-    CmdletsToExport = '*'
+    FunctionsToExport = @(
+        'Get-GitHubRelease'
+        'New-GitHubRelease'
+        'Remove-GitHubRelease'
+        'Get-GitHubReleaseAsset'
+        'New-GitHubReleaseAsset'
+        'Remove-GitHubReleaseAsset'
+        'New-CoverageReportFromPester'
+        'Get-CodeCoverageMetric'
+    )
+    #CmdletsToExport = '*'
     #VariablesToExport = ''
-    AliasesToExport = '*'
+    #AliasesToExport = '*'
     #FormatsToProcess = ''
     #RequiredModules = ''
     PrivateData = @{
