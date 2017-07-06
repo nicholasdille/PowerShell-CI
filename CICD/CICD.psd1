@@ -12,16 +12,7 @@
     #VariablesToExport = ''
     AliasesToExport = '*'
     #FormatsToProcess = ''
-    RequiredModules = @(
-        @{
-            ModuleName = 'PSCoverage'
-            ModuleVersion = '0.1.39'
-        },
-        @{
-            ModuleName = 'PSGitHub'
-            ModuleVersion = '0.13.9'
-        }
-    )
+    #RequiredModules = ''
     PrivateData = @{
         PSData = @{
             Tags = @()
