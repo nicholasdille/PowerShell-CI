@@ -7,6 +7,6 @@
 - Skipping unit tests for now to get this published quickly
 - Added behaviour to skip deployment steps
 
-# 0.1.14
+# 0.1.16
 
 - Fixed division by zero caused by empty test list
