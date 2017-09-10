@@ -18,7 +18,9 @@ function Get-CodeCoverageMetric {
         }
         Function = @{}
     }
-    $CoverageMetrics.Statement.Coverage = [math]::Round($CoverageMetrics.Statement.Executed / $CoverageMetrics.Statement.Analyzed * 100, 2)
+    if ($CoverageMetrics.Statement.Analyzed -gt 0) {
+        $CoverageMetrics.Statement.Coverage = [math]::Round($CoverageMetrics.Statement.Executed / $CoverageMetrics.Statement.Analyzed * 100, 2)
+    }
     #endregion
 
     #region Enumerate hit and missed commands and add statement coverage per function
@@ -54,7 +56,9 @@ function Get-CodeCoverageMetric {
 
     #region Enumerate function data and calculate statement coverage per function
     foreach ($function in $CoverageMetrics.Functions.Values) {
-        $function.Coverage = [math]::Round($function.Executed / $function.Analyzed * 100)
+        if ($function.Analyzed -gt 0) {
+            $function.Coverage = [math]::Round($function.Executed / $function.Analyzed * 100)
+        }
     }
     #endregion
 
@@ -64,7 +68,9 @@ function Get-CodeCoverageMetric {
         Executed = ($CoverageMetrics.Functions.Values | Where-Object { $_.Executed -gt 0 }).Length
         Missed   = ($CoverageMetrics.Functions.Values | Where-Object { $_.Executed -eq 0 }).Length
     }
-    $CoverageMetrics.Function.Coverage = [math]::Round($CoverageMetrics.Function.Executed / $CoverageMetrics.Function.Analyzed * 100, 2)
+    if ($CoverageMetrics.Function.Analyzed -gt 0) {
+        $CoverageMetrics.Function.Coverage = [math]::Round($CoverageMetrics.Function.Executed / $CoverageMetrics.Function.Analyzed * 100, 2)
+    }
     #endregion
 
     $CoverageMetrics
