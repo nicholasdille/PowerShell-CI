@@ -63,6 +63,8 @@ if (
             "Install module from [PowerShell Gallery](https://www.powershellgallery.com/packages/$env:ModuleName/$env:ModuleVersion)"
             ' '
             "See build output at [AppVeyor](https://ci.appveyor.com/project/$env:GitHubOwner/$env:GitHubRepo/build/$env:APPVEYOR_BUILD_NUMBER="
+            ' '
+            "See test coverage at [Coveralls](https://coveralls.io/github/$env:GitHubOwner/$env:GitHubRepo)"
         )
         $ReleaseNotesSection = $ReleaseNotesSection | Where-Object { $_ -notlike '# *' -and $_ -ne '' }
         if ($ReleaseNotesSection -is [array]) {
@@ -83,11 +85,11 @@ if (
 
     "Creating release in GitHub repository" |
         Write-Host
-    $GitHubReleaseId = New-GitHubRelease -Owner nicholasdille -Repository PowerShell-Statistics -Token $env:GitHubToken -Name $env:ModuleVersion -Branch $env:BHBranchName -Body $ReleaseNotes
+    $GitHubReleaseId = New-GitHubRelease -Owner $env:GitHubOwner -Repository $env:GitHubRepo -Token $env:GitHubToken -Name $env:ModuleVersion -Branch $env:BHBranchName -Body $ReleaseNotes
 
     "Uploading asset to GitHub release" |
         Write-Host
-    $GitHubAssetId = New-GitHubReleaseAsset -Owner nicholasdille -Repository PowerShell-Statistics -Token $env:GitHubToken -Release $GitHubReleaseId -Path $AssetPath
+    $GitHubAssetId = New-GitHubReleaseAsset -Owner $env:GitHubOwner -Repository $env:GitHubRepo -Token $env:GitHubToken -Release $GitHubReleaseId -Path $AssetPath
 }
 else
 {
