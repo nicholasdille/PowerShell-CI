@@ -1,3 +1,7 @@
+# 0.1.23
+
+- Improved quality by using script analyzer
+
 # 0.1.12
 
 - Added cmdlets for managing GitHub releases
