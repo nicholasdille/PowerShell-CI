@@ -1,6 +1,6 @@
 @{
     RootModule = 'CICD.psm1'
-    ModuleVersion = '0.1'
+    ModuleVersion = '0.1.23'
     GUID = 'd859a6ea-28c9-425e-8678-5e1fecae01b4'
     Author = 'Nicholas Dille'
     # CompanyName = ''
